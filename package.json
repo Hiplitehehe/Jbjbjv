@@ -1,0 +1,10 @@
+{
+  "name": "static-website",
+  "version": "1.0.0",
+  "description": "A simple static website deployed on Cloudflare Pages",
+  "main": "index.html",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "license": "MIT"
+}
