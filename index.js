@@ -1,48 +1,53 @@
-// This function is triggered when the button is clicked
-function generateKey() {
-    const key = generateRandomKey();  // Function to generate a random key
-    const keyElement = document.getElementById("key");
-    
-    // Store the generated key in the localStorage so it's persistent
-    localStorage.setItem('generatedKey', key);
+// Fetch the unique ID from the URL
+const urlParams = window.location.pathname.split('/').filter(Boolean);
+const uniqueId = urlParams[0];  // Assuming URL is like /<id>
 
-    // Display the generated key
-    keyElement.innerHTML = `Your key is: ${key}`;
+// Check if a key exists for this ID in localStorage
+const keyElement = document.getElementById("key");
 
-    // Hide the button after generating the key
-    document.getElementById("generate-btn").style.display = "none";
+function checkIfKeyExists() {
+    // Check if the key exists for the given ID
+    const storedKey = localStorage.getItem(uniqueId);
+    const expirationTime = localStorage.getItem(`${uniqueId}_expiration`);
 
-    // Set expiration time for the key (e.g., 1 day = 86400000 ms)
-    const expirationTime = Date.now() + 86400000;  // 24 hours in ms
-    localStorage.setItem('keyExpiration', expirationTime);
-
-    // Optionally, check expiration and clear key if expired after reload
-    setInterval(checkExpiration, 1000);
-}
-
-// Generate a random key (this is just an example of a random key)
-function generateRandomKey() {
-    return 'key' + Math.floor(Math.random() * 10000000000);  // Random key example
-}
-
-// Check if the key has expired
-function checkExpiration() {
-    const expirationTime = localStorage.getItem('keyExpiration');
-    const currentTime = Date.now();
-
-    if (currentTime > expirationTime) {
-        localStorage.removeItem('generatedKey');
-        localStorage.removeItem('keyExpiration');
-        document.getElementById('key').innerHTML = 'This key has expired.';
+    // If the key exists and has not expired, display it
+    if (storedKey && Date.now() < expirationTime) {
+        keyElement.innerHTML = `Your key is: ${storedKey}`;
+        document.getElementById("generate-btn").style.display = "none";  // Hide button if key exists
+    } else if (storedKey && Date.now() >= expirationTime) {
+        // If the key has expired, show expiration message
+        localStorage.removeItem(uniqueId);
+        localStorage.removeItem(`${uniqueId}_expiration`);
+        keyElement.innerHTML = 'This key has expired.';
+        document.getElementById("generate-btn").style.display = "inline-block";  // Show the button again
+    } else {
+        // No key exists, show button to generate a new key
         document.getElementById("generate-btn").style.display = "inline-block";
     }
 }
 
-// Check if the key exists in localStorage on page load
+// Generate and store the key
+function generateKey() {
+    const newKey = generateRandomKey();  // Function to generate a random key
+    const expirationTime = Date.now() + 86400000;  // Set expiration to 1 day (86400000 ms)
+    
+    // Store the key and expiration time in localStorage
+    localStorage.setItem(uniqueId, newKey);
+    localStorage.setItem(`${uniqueId}_expiration`, expirationTime);
+
+    // Display the generated key
+    keyElement.innerHTML = `Your key is: ${newKey}`;
+
+    // Hide the generate button
+    document.getElementById("generate-btn").style.display = "none";
+}
+
+// Generate a random key
+function generateRandomKey() {
+    return 'key' + Math.floor(Math.random() * 10000000000);  // Random key example
+}
+
+// Run this function when the page loads to check if a key already exists
 window.onload = function () {
-    const storedKey = localStorage.getItem('generatedKey');
-    if (storedKey) {
-        document.getElementById('key').innerHTML = `Your key is: ${storedKey}`;
-        document.getElementById("generate-btn").style.display = "none";  // Hide button if key exists
-    }
+    checkIfKeyExists();
 };
