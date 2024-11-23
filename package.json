@@ -1,10 +1,12 @@
 {
-  "name": "static-website",
+  "name": "my-website",
   "version": "1.0.0",
-  "description": "A simple static website deployed on Cloudflare Pages",
-  "main": "index.html",
-  "scripts": {},
-  "dependencies": {},
-  "devDependencies": {},
-  "license": "MIT"
+  "description": "A simple static website",
+  "scripts": {
+    "start": "live-server", 
+    "build": "echo 'No build step specified.'"
+  },
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
 }
