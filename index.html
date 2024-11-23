@@ -4,19 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Key Generator</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #key {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #generate-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Enter a Key ID to Generate/Fetch</h1>
-    <input type="text" id="url-input" placeholder="Enter Key ID">
-    <button id="generate-btn" onclick="fetchKey()">Generate/Fetch Key</button>
 
-    <div id="key-container" style="display:none;">
-        <h2>Your Generated Key:</h2>
-        <p id="key"></p>
-    </div>
+    <h1>Welcome to the Key Generator</h1>
+    <p>Here is your key for this link:</p>
 
-    <div id="error-message" style="color:red; display:none;"></div>
+    <button id="generate-btn" onclick="generateKey()">Generate Key</button>
+
+    <div id="key"></div>
 
     <script src="script.js"></script>
 </body>
