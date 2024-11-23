@@ -1,53 +1,62 @@
-// Fetch the unique ID from the URL
 const urlParams = window.location.pathname.split('/').filter(Boolean);
-const uniqueId = urlParams[0];  // Assuming URL is like /<id>
+const uniqueId = urlParams[0];  // Get unique ID from URL
 
-// Check if a key exists for this ID in localStorage
 const keyElement = document.getElementById("key");
+const generateBtn = document.getElementById("generate-btn");
+const completeTaskBtn = document.getElementById("complete-task-btn");
+const taskInstruction = document.getElementById("task-instruction");
 
-function checkIfKeyExists() {
-    // Check if the key exists for the given ID
-    const storedKey = localStorage.getItem(uniqueId);
-    const expirationTime = localStorage.getItem(`${uniqueId}_expiration`);
+// Lootlabs URL
+const lootlabsUrl = "https://lootdest.org/s?21e4561c";
 
-    // If the key exists and has not expired, display it
-    if (storedKey && Date.now() < expirationTime) {
-        keyElement.innerHTML = `Your key is: ${storedKey}`;
-        document.getElementById("generate-btn").style.display = "none";  // Hide button if key exists
-    } else if (storedKey && Date.now() >= expirationTime) {
-        // If the key has expired, show expiration message
-        localStorage.removeItem(uniqueId);
-        localStorage.removeItem(`${uniqueId}_expiration`);
-        keyElement.innerHTML = 'This key has expired.';
-        document.getElementById("generate-btn").style.display = "inline-block";  // Show the button again
+// Check if the user has completed the Lootlabs task
+function checkIfTaskCompleted() {
+    const taskCompleted = localStorage.getItem(`${uniqueId}_taskCompleted`);
+    
+    if (taskCompleted) {
+        // If the task is completed, show the button to generate key
+        taskInstruction.innerHTML = "Task completed! You can now generate your key.";
+        completeTaskBtn.style.display = "none";
+        generateBtn.style.display = "inline-block";
     } else {
-        // No key exists, show button to generate a new key
-        document.getElementById("generate-btn").style.display = "inline-block";
+        taskInstruction.innerHTML = "Complete the task to generate your key.";
+        completeTaskBtn.style.display = "inline-block";
+        generateBtn.style.display = "none";
     }
 }
 
-// Generate and store the key
+// Redirect user to Lootlabs page
+function redirectToLootlabs() {
+    // Store task completion status in localStorage
+    window.location.href = lootlabsUrl;
+}
+
+// Mark the task as completed
+function completeTask() {
+    localStorage.setItem(`${uniqueId}_taskCompleted`, "true");
+    checkIfTaskCompleted(); // Recheck task status
+}
+
+// Generate a key and display it
 function generateKey() {
-    const newKey = generateRandomKey();  // Function to generate a random key
-    const expirationTime = Date.now() + 86400000;  // Set expiration to 1 day (86400000 ms)
+    const newKey = generateRandomKey();
+    const expirationTime = Date.now() + 86400000;  // Key expires in 1 day
     
-    // Store the key and expiration time in localStorage
+    // Store the key and expiration time
     localStorage.setItem(uniqueId, newKey);
     localStorage.setItem(`${uniqueId}_expiration`, expirationTime);
 
-    // Display the generated key
+    // Display the key
     keyElement.innerHTML = `Your key is: ${newKey}`;
-
-    // Hide the generate button
-    document.getElementById("generate-btn").style.display = "none";
+    generateBtn.style.display = "none";  // Hide the generate button after use
 }
 
 // Generate a random key
 function generateRandomKey() {
-    return 'key' + Math.floor(Math.random() * 10000000000);  // Random key example
+    return 'key' + Math.floor(Math.random() * 10000000000);
 }
 
-// Run this function when the page loads to check if a key already exists
+// Check if the task has been completed on page load
 window.onload = function () {
-    checkIfKeyExists();
+    checkIfTaskCompleted();
 };
