@@ -3,15 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Simple Website</title>
-  <link rel="stylesheet" href="css/style.css"> <!-- Optional CSS file -->
+  <title>Generate Key</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    #key-container {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      display: none;
+    }
+    #error-message {
+      color: red;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to My Simple Website</h1>
-  
-  <button id="greetingButton">Click Me for a Greeting</button>
-  <p id="greetingMessage"></p> <!-- The greeting message will appear here -->
 
-  <script src="js/index.js"></script> <!-- External JavaScript file -->
+  <h1>Welcome to Key Generator</h1>
+  <p id="instructions">Your unique key will appear below once you visit the URL.</p>
+
+  <!-- Container to display the generated key -->
+  <div id="key-container">
+    <h2>Your Key: <span id="key"></span></h2>
+  </div>
+
+  <!-- Error message -->
+  <p id="error-message">There was an error fetching the key. Please try again later.</p>
+
+  <script>
+    // Get the current URL
+    const url = window.location.pathname.split('/').pop();
+
+    // Fetch key based on the URL path
+    async function fetchKey() {
+      try {
+        const response = await fetch(`https://jbjbjv.pages.dev/${url}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch the key.");
+        }
+
+        const data = await response.json();
+
+        if (data.key) {
+          // Show the key in the container
+          document.getElementById("key").innerText = data.key;
+          document.getElementById("key-container").style.display = "block";
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById("error-message").style.display = "block";
+      }
+    }
+
+    // Call the function to fetch the key when the page loads
+    fetchKey();
+  </script>
+
 </body>
 </html>
