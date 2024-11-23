@@ -18,13 +18,21 @@
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            display: none;
+        }
+        #task-instruction {
+            font-size: 16px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
     <h1>Welcome to the Key Generator</h1>
-    <p>Here is your key for this link:</p>
+    <p id="task-instruction">Complete the task to generate your key!</p>
+
+    <!-- Button to mark task completion -->
+    <button id="complete-task-btn" onclick="redirectToLootlabs()">Complete Lootlabs Task</button>
 
     <button id="generate-btn" onclick="generateKey()">Generate Key</button>
 
