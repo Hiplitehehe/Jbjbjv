@@ -1,1 +1,28 @@
+/* Style the page */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+  text-align: center;
+}
 
+/* Style the button */
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Style the paragraph for greeting */
+#greetingMessage {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #333;
+}
