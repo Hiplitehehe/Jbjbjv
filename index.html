@@ -3,41 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Key Generator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        #key {
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-        #generate-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            display: none;
-        }
-        #task-instruction {
-            font-size: 16px;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Lootlabs Content Locker</title>
 </head>
 <body>
 
-    <h1>Welcome to the Key Generator</h1>
-    <p id="task-instruction">Complete the task to generate your key!</p>
+    <button id="generateButton">Get Key</button>
+    <div id="contentLocker"></div>
 
-    <!-- Button to mark task completion -->
-    <button id="complete-task-btn" onclick="redirectToLootlabs()">Complete Lootlabs Task</button>
+    <script>
+        document.getElementById("generateButton").addEventListener("click", function() {
+            // Example: Generate unique user ID based on session or random
+            const userId = "user" + Math.floor(Math.random() * 1000);  // You can replace this with actual logic.
+            const uniqueLink = `https://jbjbjv.pages.dev/${userId}`;
 
-    <button id="generate-btn" onclick="generateKey()">Generate Key</button>
+            // Set up the API data with the dynamic URL
+            const apiData = {
+                title: "Key Unlock",
+                url: uniqueLink,
+                tier_id: 1,
+                number_of_tasks: 3,
+                theme: 3,
+                thumbnail: "https://example.com/thumbnail.jpg"
+            };
 
-    <div id="key"></div>
+            // Send POST request to Lootlabs API to create the content locker
+            fetch("https://be.lootlabs.gg/api/lootlabs/content_locker", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer f7c80b6400e1cf0f04e1ffdb3c142fda170cc29881f3cae4a4e4abe0dfd4864b"  // Replace with your Lootlabs API key
+                },
+                body: JSON.stringify(apiData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Extract the loot_url from the response and display it
+                    const lootUrl = data.message.loot_url;
+                    document.getElementById("contentLocker").innerHTML = `
+                        <p>Your unique link to complete tasks:</p>
+                        <a href="${lootUrl}" target="_blank">${lootUrl}</a>`;
+                } else {
+                    document.getElementById("contentLocker").innerHTML = "Error generating key.";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("contentLocker").innerHTML = "Error with the request.";
+            });
+        });
+    </script>
 
-    <script src="script.js"></script>
 </body>
 </html>
